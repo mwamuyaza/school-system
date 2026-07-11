@@ -4,7 +4,7 @@ services:
     name: university-frontend
     env: static
     buildCommand: npm run build
-    publishPath: dist
+    publishDir: dist
     envVars:
       - key: VITE_API_BASE_URL
         fromService:
@@ -17,7 +17,7 @@ services:
     name: university-java-backend
     env: java
     region: oregon
-    baseDir: spring-boot-backend
+    rootDir: spring-boot-backend
     buildCommand: ./mvnw clean package -DskipTests
     startCommand: java -jar target/*.jar
     envVars:
