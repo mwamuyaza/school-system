@@ -16,7 +16,7 @@ services:
   # 2. Frontend React (Vite) Static Site
   - type: web
     name: university-frontend
-    env: static
+    runtime: static
     buildCommand: npm run build
     staticPublishPath: dist
     envVars:
