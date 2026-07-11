@@ -14,8 +14,9 @@ services:
           property: connectionString
 
   # 2. Frontend React (Vite) Static Site
-  - type: static
+  - type: web
     name: university-frontend
+    env: static
     buildCommand: npm run build
     publishDir: dist
     envVars:
