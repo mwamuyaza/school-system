@@ -2,7 +2,7 @@ services:
   # 1. Frontend React (Vite) Static Site
   - type: web
     name: university-frontend
-    env: static
+    runtime: static
     buildCommand: npm run build
     publishDir: dist
     envVars:
@@ -15,7 +15,7 @@ services:
   # 2. Backend Java Spring Boot Web Service
   - type: web
     name: university-java-backend
-    env: java
+    runtime: java
     region: oregon
     rootDir: spring-boot-backend
     buildCommand: ./mvnw clean package -DskipTests
