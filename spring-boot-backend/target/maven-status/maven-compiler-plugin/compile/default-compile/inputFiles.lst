@@ -1,0 +1,11 @@
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\controller\AdminController.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\repository\StudentRepository.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\model\Student.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\repository\StaffRepository.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\model\Staff.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\service\EmailService.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\repository\UserRepository.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\dto\AuthRequest.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\model\User.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\HubApplication.java
+C:\Users\HP 820\university-portal\spring-boot-backend\src\main\java\com\university\hub\controller\AuthController.java

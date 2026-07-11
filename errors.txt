@@ -1,0 +1,100 @@
+src/App.tsx(244,74): error TS1005: ':' expected.
+src/App.tsx(273,25): error TS1127: Invalid character.
+src/App.tsx(273,28): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(273,37): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(273,50): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(273,55): error TS1435: Unknown keyword or identifier. Did you mean 'set'?
+src/App.tsx(273,60): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(273,63): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(273,77): error TS1128: Declaration or statement expected.
+src/App.tsx(273,79): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(273,86): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(273,92): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(273,103): error TS1443: Module declaration names may only use ' or " quoted strings.
+src/App.tsx(324,41): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(324,48): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(327,35): error TS1005: ';' expected.
+src/App.tsx(327,46): error TS1005: ';' expected.
+src/App.tsx(328,33): error TS1005: ';' expected.
+src/App.tsx(328,42): error TS1005: ';' expected.
+src/App.tsx(330,19): error TS1005: ':' expected.
+src/App.tsx(344,41): error TS1005: ';' expected.
+src/App.tsx(344,48): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(358,41): error TS1005: ';' expected.
+src/App.tsx(358,48): error TS1434: Unexpected keyword or identifier.
+src/App.tsx(408,26): error TS1005: ';' expected.
+src/App.tsx(408,33): error TS1005: ';' expected.
+src/App.tsx(408,42): error TS1005: ';' expected.
+src/App.tsx(408,53): error TS1005: ';' expected.
+src/App.tsx(408,77): error TS1005: ';' expected.
+src/App.tsx(408,87): error TS1005: ';' expected.
+src/App.tsx(408,91): error TS1005: ';' expected.
+src/App.tsx(408,116): error TS1005: ';' expected.
+src/App.tsx(408,131): error TS1005: ';' expected.
+src/App.tsx(408,144): error TS1005: ';' expected.
+src/App.tsx(423,27): error TS1005: ';' expected.
+src/App.tsx(423,34): error TS1005: ';' expected.
+src/App.tsx(423,39): error TS1005: ';' expected.
+src/App.tsx(423,47): error TS1005: ';' expected.
+src/App.tsx(423,57): error TS1005: ';' expected.
+src/App.tsx(423,82): error TS1005: ';' expected.
+src/App.tsx(423,93): error TS1005: ';' expected.
+src/App.tsx(423,105): error TS1005: ';' expected.
+src/App.tsx(423,120): error TS1005: ';' expected.
+src/App.tsx(429,27): error TS1005: ';' expected.
+src/App.tsx(429,34): error TS1005: ';' expected.
+src/App.tsx(429,39): error TS1005: ';' expected.
+src/App.tsx(429,47): error TS1005: ';' expected.
+src/App.tsx(429,57): error TS1005: ';' expected.
+src/App.tsx(429,82): error TS1005: ';' expected.
+src/App.tsx(429,93): error TS1005: ';' expected.
+src/App.tsx(429,105): error TS1005: ';' expected.
+src/App.tsx(429,120): error TS1005: ';' expected.
+src/App.tsx(435,27): error TS1005: ';' expected.
+src/App.tsx(435,34): error TS1005: ';' expected.
+src/App.tsx(435,39): error TS1005: ';' expected.
+src/App.tsx(435,47): error TS1005: ';' expected.
+src/App.tsx(435,57): error TS1005: ';' expected.
+src/App.tsx(435,82): error TS1005: ';' expected.
+src/App.tsx(435,93): error TS1005: ';' expected.
+src/App.tsx(435,105): error TS1005: ';' expected.
+src/App.tsx(435,120): error TS1005: ';' expected.
+src/App.tsx(507,31): error TS1005: ';' expected.
+src/App.tsx(507,38): error TS1005: ';' expected.
+src/App.tsx(507,45): error TS1005: ';' expected.
+src/App.tsx(507,53): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+src/App.tsx(507,57): error TS1005: ';' expected.
+src/App.tsx(507,67): error TS1005: ';' expected.
+src/App.tsx(507,78): error TS1005: ';' expected.
+src/App.tsx(507,93): error TS1005: ';' expected.
+src/App.tsx(507,108): error TS1005: ';' expected.
+src/App.tsx(514,31): error TS1005: ';' expected.
+src/App.tsx(514,38): error TS1005: ';' expected.
+src/App.tsx(514,45): error TS1005: ';' expected.
+src/App.tsx(514,53): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+src/App.tsx(514,57): error TS1005: ';' expected.
+src/App.tsx(514,67): error TS1005: ';' expected.
+src/App.tsx(514,78): error TS1005: ';' expected.
+src/App.tsx(514,93): error TS1005: ';' expected.
+src/App.tsx(514,108): error TS1005: ';' expected.
+src/App.tsx(520,32): error TS1005: ';' expected.
+src/App.tsx(520,36): error TS1005: ';' expected.
+src/App.tsx(520,47): error TS1005: ';' expected.
+src/App.tsx(520,65): error TS1005: ';' expected.
+src/App.tsx(520,71): error TS1005: ';' expected.
+src/App.tsx(520,79): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+src/App.tsx(520,83): error TS1005: ';' expected.
+src/App.tsx(697,29): error TS1005: ';' expected.
+src/App.tsx(697,36): error TS1005: ';' expected.
+src/App.tsx(697,50): error TS1005: ';' expected.
+src/App.tsx(697,61): error TS1005: ';' expected.
+src/App.tsx(697,68): error TS1005: ';' expected.
+src/App.tsx(697,76): error TS1005: ';' expected.
+src/App.tsx(697,96): error TS1005: ';' expected.
+src/App.tsx(697,109): error TS1005: ';' expected.
+src/App.tsx(697,115): error TS1005: ';' expected.
+src/App.tsx(697,130): error TS1005: ';' expected.
+src/App.tsx(697,145): error TS1005: ';' expected.
+src/App.tsx(697,155): error TS1005: ';' expected.
+src/App.tsx(697,160): error TS1005: ';' expected.
+src/App.tsx(697,171): error TS1005: ';' expected.

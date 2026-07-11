@@ -1,0 +1,946 @@
+```tsx
+import React, { useState, useEffect } from 'react';
+import { 
+  GraduationCap, 
+  Lock, 
+  User, 
+  ShieldCheck, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Calendar,
+  AlertCircle,
+  UserPlus,
+  Key,
+  ArrowLeft,
+  BookOpen
+} from 'lucide-react';
+import axios from 'axios';
+import { User as UserType, Class, Subject, Staff } from './types';
+import Sidebar from './components/Sidebar';
+import DashboardStats from './components/DashboardStats';
+import StudentModule from './components/StudentModule';
+import StaffModule from './components/StaffModule';
+import AcademicsModule from './components/AcademicsModule';
+import GradesModule from './components/GradesModule';
+import AttendanceModule from './components/AttendanceModule';
+import FinanceModule from './components/FinanceModule';
+import LogsModule from './components/LogsModule';
+import ReportsModule from './components/ReportsModule';
+import StudentMyCourses from './components/StudentMyCourses';
+import StaffMyCourses from './components/StaffMyCourses';
+import StaffSettings from './components/StaffSettings';
+import AdmissionsModule from './components/AdmissionsModule';
+
+export default function App() {
+  const [user, setUser] = useState<UserType | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [staffList, setStaffList] = useState<Staff[]>([]);
+  const [dashboardStats, setDashboardStats] = useState<any>(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+
+  // Finance module helper
+  const [financeActiveStudent, setFinanceActiveStudent] = useState<number | null>(null);
+
+  // Authentication Fields
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('admin');
+  const [loginError, setLoginError] = useState('');
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  // Authentication mode ('login' | 'signup' | 'forgot' | 'verify')
+  const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot' | 'verify'>('login');
+
+  // Email verification screen states
+  const [verificationUsername, setVerificationUsername] = useState('');
+  const [verificationEmail, setVerificationEmail] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [debugOtpCode, setDebugOtpCode] = useState(''); // useful for sandbox testing in web UI
+  const [verificationMessage, setVerificationMessage] = useState('');
+
+  // Registration Fields
+  const [signUpRole, setSignUpRole] = useState<'STUDENT' | 'STAFF'>('STUDENT');
+  const [regUsername, setRegUsername] = useState('');
+  const [regPassword, setRegPassword] = useState('');
+  const [regEmail, setRegEmail] = useState('');
+  const [regFirstName, setRegFirstName] = useState('');
+  const [regLastName, setRegLastName] = useState('');
+  const [regClassId, setRegClassId] = useState('1'); // default selection is 1 (Computer Science)
+  const [regDob, setRegDob] = useState('2004-05-14');
+  const [regGender, setRegGender] = useState<'MALE' | 'FEMALE' | 'OTHER'>('MALE');
+  const [regPhone, setRegPhone] = useState('');
+  const [regAddress, setRegAddress] = useState('');
+
+  // Lecturer-specific signup states
+  const [regPosition, setRegPosition] = useState('Lecturer');
+  const [regDepartment, setRegDepartment] = useState('Computer Science');
+  const [regQualification, setRegQualification] = useState('M.Sc.');
+
+  // Password Reset fields
+  const [forgotUsername, setForgotUsername] = useState('');
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotNewPassword, setForgotNewPassword] = useState('');
+  const [forgotSuccess, setForgotSuccess] = useState('');
+  
+  // Dynamic OTP Code verification steps
+  const [resetStep, setResetStep] = useState<'request' | 'verify'>('request');
+  const [sentCode, setSentCode] = useState('');
+  const [userInputCode, setUserInputCode] = useState('');
+
+  // Associated user/student profile linking
+  const [profile, setProfile] = useState<any>(null);
+
+  // Synchronise token on mount with robust safety validation
+  useEffect(() => {
+    const cachedToken = localStorage.getItem('uni_hub_token');
+    const cachedUser = localStorage.getItem('uni_hub_user');
+    const cachedProfile = localStorage.getItem('uni_hub_profile');
+    if (cachedToken && cachedUser) {
+      try {
+        const parsed = JSON.parse(cachedUser);
+        if (parsed && typeof parsed === 'object' && parsed.role && parsed.username) {
+          setToken(cachedToken);
+          setUser(parsed);
+          if (cachedProfile) {
+            setProfile(JSON.parse(cachedProfile));
+          }
+          setActiveTab(parsed.role === 'STUDENT' ? 'classes' : 'dashboard');
+        } else {
+          localStorage.removeItem('uni_hub_token');
+          localStorage.removeItem('uni_hub_user');
+          localStorage.removeItem('uni_hub_profile');
+        }
+      } catch (err) {
+        localStorage.removeItem('uni_hub_token');
+        localStorage.removeItem('uni_hub_user');
+        localStorage.removeItem('uni_hub_profile');
+      }
+    }
+    setCheckingAuth(false);
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    try {
+      const res = await axios.post('/api/auth/login', { username, password });
+      const { token: userToken, user: userData, profile: userProfile } = res.data;
+      
+      localStorage.setItem('uni_hub_token', userToken);
+      localStorage.setItem('uni_hub_user', JSON.stringify(userData));
+      if (userProfile) {
+        localStorage.setItem('uni_hub_profile', JSON.stringify(userProfile));
+        setProfile(userProfile);
+      } else {
+        localStorage.removeItem('uni_hub_profile');
+        setProfile(null);
+      }
+      
+      setToken(userToken);
+      setUser(userData);
+      
+      if (userData.role === 'STUDENT') {
+        setActiveTab('classes');
+      } else {
+        setActiveTab('dashboard');
+      }
+    } catch (err: any) {
+      if (err.response?.data?.error === "ACCOUNT_UNVERIFIED") {
+        setVerificationUsername(err.response.data.username || username);
+        setVerificationEmail(err.response.data.personalEmail || err.response.data.email || '');
+        if (err.response.data._debugCode) {
+          setDebugOtpCode(err.response.data._debugCode);
+        }
+        setAuthMode('verify');
+        setLoginError("Your email is not verified yet. Please enter the verification code sent to your personal email inbox.");
+        return;
+      }
+      setLoginError(err.response?.data?.error || "Invalid username or password credentials");
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    setForgotSuccess('');
+    try {
+      if (signUpRole === 'STAFF') {
+        const res = await axios.post('/api/auth/signup-staff', {
+          username: regUsername,
+          password: regPassword,
+          email: regEmail, // personal backup email
+          firstName: regFirstName,
+          lastName: regLastName,
+          position: regPosition,
+          department: regDepartment,
+          qualification: regQualification,
+          phone: regPhone,
+          address: regAddress
+        });
+
+        setVerificationUsername(res.data.username);
+        setVerificationEmail(res.data.personalEmail);
+        if (res.data._debugCode) {
+          setDebugOtpCode(res.data._debugCode);
+        }
+        setAuthMode('verify');
+          setForgotSuccess("Registration initialized! Your official institutional email address is: " + res.data.institutionalEmail + ". Enter the code sent to " + res.data.personalEmail + " to verify.");
+      } else {
+        const res = await axios.post('/api/auth/signup', {
+          username: regUsername,
+          password: regPassword,
+          email: regEmail, // personal backup email
+          firstName: regFirstName,
+          lastName: regLastName,
+          classCohortId: parseInt(regClassId, 10),
+          phone: regPhone,
+          address: regAddress
+        });
+
+        setVerificationUsername(res.data.username);
+        setVerificationEmail(res.data.personalEmail);
+        if (res.data._debugCode) {
+          setDebugOtpCode(res.data._debugCode);
+        }
+        setAuthMode('verify');
+          setForgotSuccess("Registration initialized! Your official institutional address is: " + res.data.institutionalEmail + ". Enter the code sent to " + res.data.personalEmail + " to verify.");
+      }
+    } catch (err: any) {
+      setLoginError(err.response?.data?.error || "Registration failed. Ensure all fields are filled completely.");
+    }
+  };
+
+  const handleVerification = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    setForgotSuccess('');
+    try {
+      const res = await axios.post('/api/auth/verify', {
+        username: verificationUsername,
+        code: verificationCode
+      });
+      
+      setForgotSuccess("Account activated successfully! Please sign in using your username or generated institutional email address.");
+      setVerificationCode('');
+      setDebugOtpCode('');
+      setTimeout(() => {
+        setAuthMode('login');
+        setForgotSuccess('');
+      }, 3000);
+    } catch (err: any) {
+      setLoginError(err.response?.data?.error || "Invalid verification code. Please try again.");
+    }
+  };
+
+  const handleResendCode = async () => {
+    setLoginError('');
+    setForgotSuccess('');
+    try {
+      const res = await axios.post(`/api/auth/resend-code?personalEmail=${encodeURIComponent(verificationEmail)}`, {
+        username: verificationUsername
+      });
+      setForgotSuccess("📬 A fresh verification code has been dispatched to your backup email address!");
+      if (res.data._debugCode) {
+        setDebugOtpCode(res.data._debugCode);
+      }
+    } catch (err: any) {
+      setLoginError(err.response?.data?.error || "Failed to resend code.");
+    }
+  };
+
+  const handleSendRecoveryCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    setForgotSuccess('');
+
+    if (!forgotUsername || !forgotEmail) {
+      setLoginError("Please provide your username and associated personal backup email address.");
+      return;
+    }
+
+    try {
+      const res = await axios.post('/api/auth/forgot-password-request', {
+        username: forgotUsername,
+        email: forgotEmail
+      });
+      setSentCode(res.data._debugCode || 'SERVER_VERIFIED');
+      setResetStep('verify');
+      setForgotSuccess(`📬 Recovery verification code sent to ${forgotEmail}. Please check your inbox!`);
+    } catch (err: any) {
+      setLoginError(err.response?.data?.error || "Failed to dispatch recovery request.");
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    setForgotSuccess('');
+
+    try {
+      await axios.post('/api/auth/forgot-password', {
+        username: forgotUsername,
+        email: forgotEmail,
+        code: userInputCode,
+        newPassword: forgotNewPassword
+      });
+      setForgotSuccess("Your password has been successfully updated! Redirecting you to login...");
+      setTimeout(() => {
+        setAuthMode('login');
+        setUsername(forgotUsername);
+        setPassword(forgotNewPassword);
+        setForgotSuccess('');
+        setResetStep('request');
+        setUserInputCode('');
+        setSentCode('');
+      }, 3000);
+    } catch (err: any) {
+      setLoginError(err.response?.data?.error || "Failed to update security credentials.");
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('uni_hub_token');
+    localStorage.removeItem('uni_hub_user');
+    localStorage.removeItem('uni_hub_profile');
+    setToken(null);
+    setUser(null);
+    setProfile(null);
+    setActiveTab('dashboard');
+  };
+
+  const fetchDashboardStats = async () => {
+    if (!token) return;
+    if (user?.role === 'STUDENT') {
+      setDashboardStats(null);
+      return;
+    }
+    setStatsLoading(true);
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      let url = '/api/dashboard/stats';
+      const params: string[] = [];
+      if (startDate) params.push(`startDate=${startDate}`);
+      if (endDate) params.push(`endDate=${endDate}`);
+      if (params.length > 0) {
+        url += `?${params.join('&')}`;
+      }
+      const res = await axios.get(url, { headers });
+      setDashboardStats(res.data);
+    } catch (e) {
+      console.error("Failed to load metrics", e);
+    } chunks: finally {
+      setStatsLoading(false);
+    }
+  };
+
+  const fetchProfileStatus = async () => {
+    if (!token) return;
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      const res = await axios.get('/api/auth/me', { headers });
+      if (res.data?.profile) {
+        setProfile(res.data.profile);
+        localStorage.setItem('uni_hub_profile', JSON.stringify(res.data.profile));
+      }
+    } catch (e) {
+      console.error("Failed to fetch profile status sync", e);
+    }
+  };
+
+  const fetchAcadData = async () => {
+    if (!token) return;
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      if (user?.role === 'STUDENT') {
+        const [cRes, sRes] = await axios.all([
+          axios.get('/api/classes', { headers }),
+          axios.get('/api/subjects', { headers })
+        ]);
+        setClasses(cRes.data);
+        setSubjects(sRes.data);
+        setStaffList([]);
+      } else {
+        const [cRes, sRes, fRes] = await axios.all([
+          axios.get('/api/classes', { headers }),
+          axios.get('/api/subjects', { headers }),
+          axios.get('/api/staff', { headers })
+        ]);
+        setClasses(cRes.data);
+        setSubjects(sRes.data);
+        setStaffList(fRes.data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch general system variables", e);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchAcadData();
+      fetchDashboardStats();
+      fetchProfileStatus();
+    }
+  }, [token, activeTab, startDate, endDate, user]);
+
+  const handleSelectStudentFeesForBilling = (studentId: number) => {
+    setFinanceActiveStudent(studentId);
+    setActiveTab('fees');
+  };
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center font-sans">
+        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-xs text-slate-500 mt-3 font-medium">Authorizing system indices...</span>
+      </div>
+    );
+  }
+
+  // --- RENDERING AUTHENTICATION PANELS ---
+  if (!token || !user) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans antialiased text-slate-800">
+        <div className={`w-full bg-white rounded-xl border border-slate-200 shadow-md p-8 relative overflow-hidden transition-all duration-300 ${authMode === 'signup' ? 'max-w-2xl' : 'max-w-md'}`}>
+          
+          <div className="text-center space-y-2 z-10 relative mb-6">
+            <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white mx-auto shadow-md">
+              <GraduationCap className="w-8 h-8" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900">University Hub</h2>
+              <span className="text-[10px] font-mono text-blue-600 font-bold tracking-widest uppercase block mt-1">Management Portal</span>
+            </div>
+          </div>
+
+          <div className="flex border-b border-slate-200 mb-6">
+            <button 
+              onClick={() => { setAuthMode('login'); setLoginError(''); setForgotSuccess(''); }}
+              className={`flex-1 pb-3 text-xs font-bold uppercase tracking-wider border-b-2 text-center transition-all ${authMode === 'login' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+            >
+              Sign In
+            </button>
+            <button 
+              onClick={() => { setAuthMode('signup'); setLoginError(''); setForgotSuccess(''); }}
+              className={`flex-1 pb-3 text-xs font-bold uppercase tracking-wider border-b-2 text-center transition-all ${authMode === 'signup' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+            >
+              Sign Up / Onboard
+            </button>
+            <button 
+              onClick={() => { setAuthMode('forgot'); setLoginError(''); setForgotSuccess(''); setResetStep('request'); }}
+              className={`flex-1 pb-3 text-xs font-bold uppercase tracking-wider border-b-2 text-center transition-all ${authMode === 'forgot' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+            >
+              Recover Key
+            </button>
+          </div>
+
+          {loginError && (
+            <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-xs font-semibold flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          {forgotSuccess && (
+            <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-semibold flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span>{forgotSuccess}</span>
+            </div>
+          )}
+
+          {/* 1. SIGN IN SCREEN */}
+          {authMode === 'login' && (
+            <div className="space-y-6">
+              <form onSubmit={handleLogin} className="space-y-4 text-left">
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Username or Institutional Email</label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      required
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg pl-10 pr-4 py-2.5 text-xs text-slate-800 transition-all"
+                      placeholder="username or name.surname@student.universityhub.edu"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Password</label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg pl-10 pr-4 py-2.5 text-xs text-slate-800 transition-all font-medium"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg py-2.5 text-xs flex justify-center items-center gap-2 transition-all cursor-pointer shadow-sm active:scale-98"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Enter University Hub</span>
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* 2. SIGN UP/ONBOARDING SCREEN */}
+          {authMode === 'signup' && (
+            <form onSubmit={handleSignUp} className="space-y-4 text-left">
+              <div className="flex gap-1.5 p-1 bg-slate-100 rounded-lg max-w-xs">
+                <button
+                  type="button"
+                  onClick={() => { setSignUpRole('STUDENT'); setLoginError(''); }}
+                  className={`flex-1 py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer ${signUpRole === 'STUDENT' ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                >
+                  Student Sign Up
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setSignUpRole('STAFF'); setLoginError(''); }}
+                  className={`flex-1 py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer ${signUpRole === 'STAFF' ? 'bg-white text-emerald-600 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                >
+                  Lecturer Sign Up
+                </button>
+              </div>
+
+              <div className={`p-3 rounded-lg flex items-center gap-2 text-[11px] ${signUpRole === 'STUDENT' ? 'bg-blue-50 text-blue-800' : 'bg-emerald-50 text-emerald-800'}`}>
+                <BookOpen className="w-4 h-4 shrink-0" />
+                <span>
+                  {signUpRole === 'STUDENT' 
+                    ? "Fill in details to generate your institutional student account identity automatically."
+                    : "Self-onboard your faculty profile to map out assignments, courses, and schedules."}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 border-b pb-1">System Security Credentials</h3>
+                  
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Username</label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="text"
+                        required
+                        value={regUsername}
+                        onChange={(e) => setRegUsername(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg pl-10 pr-4 py-2 text-xs text-slate-800"
+                        placeholder="e.g. moses.mwamuye"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Account Password</label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="password"
+                        required
+                        value={regPassword}
+                        onChange={(e) => setRegPassword(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg pl-10 pr-4 py-2 text-xs text-slate-800"
+                        placeholder="••••••••"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Personal Email Address (For OTP Verification)</label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="email"
+                        required
+                        value={regEmail}
+                        onChange={(e) => setRegEmail(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg pl-10 pr-4 py-2 text-xs text-slate-800"
+                        placeholder="yourname@gmail.com"
+                      />
+                    </div>
+                  </div>
+
+                  {signUpRole === 'STUDENT' ? (
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Class Cohort Enrollment Program</label>
+                      <select
+                        value={regClassId}
+                        onChange={(e) => setRegClassId(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-hidden font-medium"
+                      >
+                        <option value="1">Diploma in Computer Science</option>
+                        <option value="2">Software Engineering (Full-Stack Dev)</option>
+                        <option value="3">Information Technology Infrastructure</option>
+                      </select>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Faculty Position</label>
+                          <select
+                            value={regPosition}
+                            onChange={(e) => setRegPosition(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg px-2 py-2 text-[10px] text-slate-800 focus:outline-hidden font-medium"
+                          >
+                            <option value="Lecturer">Lecturer</option>
+                            <option value="Senior Lecturer">Senior Lecturer</option>
+                            <option value="Assistant Professor">Assistant Professor</option>
+                            <option value="Professor">Professor</option>
+                          </select>
+                        </div>
+                        <div className="space-y-1">
+                          <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Department</label>
+                          <select
+                            value={regDepartment}
+                            onChange={(e) => setRegDepartment(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg px-2 py-2 text-[10px] text-slate-800 focus:outline-hidden font-medium"
+                          >
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Software Engineering">Software Engineering</option>
+                            <option value="Information Technology">Information Technology</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Academic Credential / Qualification</label>
+                        <input
+                          type="text"
+                          required
+                          value={regQualification}
+                          onChange={(e) => setRegQualification(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg px-3 py-2 text-xs text-slate-800"
+                          placeholder="e.g. M.Sc. in Distributed Computing, Ph.D."
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 border-b pb-1">Personal Registry Info</h3>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">First Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={regFirstName}
+                        onChange={(e) => setRegFirstName(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg px-3 py-2 text-xs text-slate-800"
+                        placeholder="Moses"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Last Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={regLastName}
+                        onChange={(e) => setRegLastName(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg px-3 py-2 text-xs text-slate-800"
+                        placeholder="Mwamuye"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Mobile Phone Contact</label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="tel"
+                        required
+                        value={regPhone}
+                        onChange={(e) => setRegPhone(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg pl-10 pr-4 py-2 text-xs text-slate-800"
+                        placeholder="e.g. +254 700 000000"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Physical/Residential Address</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="text"
+                        required
+                        value={regAddress}
+                        onChange={(e) => setRegAddress(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg pl-10 pr-4 py-2 text-xs text-slate-800"
+                        placeholder="e.g. Umoja, Nairobi"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className={`w-full font-semibold rounded-lg py-2.5 text-xs flex justify-center items-center gap-2 transition-all cursor-pointer shadow-sm mt-4 text-white ${signUpRole === 'STUDENT' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>Complete Account Initialization</span>
+              </button>
+            </form>
+          )}
+
+          {/* 3. 6-DIGIT EMAIL CODE VERIFICATION PANEL */}
+          {authMode === 'verify' && (
+            <div className="space-y-5 text-left">
+              <div className="bg-amber-50 border border-amber-200/60 p-3 rounded-lg text-amber-900 text-xs font-medium space-y-1">
+                <p>An activation token was sent to: <span className="font-bold underline">{verificationEmail}</span></p>
+                <p className="text-[10px] text-amber-700">Please provide the code below to fully verify and activate your university credentials mapping.</p>
+              </div>
+
+
+              <form onSubmit={handleVerification} className="space-y-4">
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Enter 6-Digit Activation Code</label>
+                  <div className="relative">
+                    <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      required
+                      maxLength={6}
+                      value={verificationCode}
+                      onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-lg pl-10 pr-4 py-2.5 text-sm tracking-widest font-mono font-bold text-center text-slate-900"
+                      placeholder="000000"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={handleResendCode}
+                    className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold transition-all cursor-pointer text-center"
+                  >
+                    Resend Code
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition-all cursor-pointer text-center shadow-sm"
+                  >
+                    Verify & Active
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* 4. PASSCODE RECOVERY DESK */}
+          {authMode === 'forgot' && (
+            <div className="space-y-4 text-left">
+              {resetStep === 'request' ? (
+                <form onSubmit={handleSendRecoveryCode} className="space-y-4">
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Username Credentials</label>
+                    <input
+                      type="text"
+                      required
+                      value={forgotUsername}
+                      onChange={(e) => setForgotUsername(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs"
+                      placeholder="e.g. moses.mwamuye"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">Personal Backup Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs"
+                      placeholder="yourname@gmail.com"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg text-xs font-semibold tracking-wide cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <Mail className="w-4 h-4" />
+                    Request Recovery Code
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  {sentCode && sentCode !== 'SERVER_VERIFIED' && (
+                    <div className="p-2 bg-slate-900 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] rounded flex justify-between items-center">
+                      <span>Dev Reset Token:</span>
+                      <span className="font-bold tracking-wider">{sentCode}</span>
+                    </div>
+                  )}
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">6-Digit Recovery Key</label>
+                    <input
+                      type="text"
+                      required
+                      maxLength={6}
+                      value={userInputCode}
+                      onChange={(e) => setUserInputCode(e.replace(/\D/g, ''))}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-center font-mono font-bold text-sm tracking-widest text-slate-900"
+                      placeholder="000000"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold uppercase text-slate-500 tracking-wider">New Secure Password</label>
+                    <input
+                      type="password"
+                      required
+                      value={forgotNewPassword}
+                      onChange={(e) => setForgotNewPassword(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setResetStep('request')}
+                      className="px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-lg text-xs flex items-center justify-center"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg text-xs font-semibold cursor-pointer"
+                    >
+                      Confirm New Passcode
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // --- MAIN PRIVILEGED WORKSPACE FRAMEWORK ---
+  return (
+    <div className="min-h-screen bg-slate-50 flex font-sans antialiased text-slate-800">
+      <Sidebar 
+        role={user.role} 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        handleLogout={handleLogout} 
+        username={user.username}
+        email={user.email}
+      />
+
+      <main className="flex-1 min-w-0 p-6 md:p-10 max-h-screen overflow-y-auto">
+        {/* UPPER DATE REGULATORS FILTER (Hidden for student views) */}
+        {user.role !== 'STUDENT' && activeTab === 'dashboard' && (
+          <div className="flex flex-wrap items-center justify-end gap-3 mb-6 bg-white border border-slate-200/60 py-2.5 px-4 rounded-2xl shadow-2xs">
+            <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+              <span>Timeline:</span>
+              <input 
+                type="date" 
+                value={startDate} 
+                onChange={(e) => setStartDate(e.target.value)}
+                className="bg-slate-50 border border-slate-200 rounded-lg p-1 text-[11px] font-mono focus:outline-hidden"
+              />
+              <span>to</span>
+              <input 
+                type="date" 
+                value={endDate} 
+                onChange={(e) => setEndDate(e.target.value)}
+                className="bg-slate-50 border border-slate-200 rounded-lg p-1 text-[11px] font-mono focus:outline-hidden"
+              />
+            </div>
+            {(startDate || endDate) && (
+              <button 
+                onClick={() => { setStartDate(''); setEndDate(''); }}
+                className="text-[10px] text-rose-600 hover:underline font-bold"
+              >
+                Clear Scope
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* WORKSPACE COMPONENT CONDITIONALS */}
+        {activeTab === 'dashboard' && user.role !== 'STUDENT' && (
+          <DashboardStats stats={dashboardStats} loading={statsLoading} />
+        )}
+
+        {activeTab === 'students' && user.role !== 'STUDENT' && (
+          <StudentModule 
+            token={token} 
+            classes={classes} 
+            onSelectStudentFees={handleSelectStudentFeesForBilling} 
+          />
+        )}
+
+        {activeTab === 'staff' && user.role !== 'STUDENT' && (
+          <StaffModule token={token} />
+        )}
+
+        {activeTab === 'classes' && (
+          user.role === 'STUDENT' ? (
+            <StudentMyCourses token={token} classes={classes} subjects={subjects} profile={profile} />
+          ) : (
+            <AcademicsModule token={token} classes={classes} subjects={subjects} staffList={staffList} refreshData={fetchAcadData} />
+          )
+        )}
+
+        {activeTab === 'grades' && (
+          <GradesModule token={token} role={user.role} classes={classes} subjects={subjects} profile={profile} />
+        )}
+
+        {activeTab === 'attendance' && (
+          <AttendanceModule token={token} role={user.role} classes={classes} subjects={subjects} profile={profile} />
+        )}
+
+        {activeTab === 'fees' && (
+          <FinanceModule 
+            token={token} 
+            role={user.role} 
+            profile={profile}
+            initialActiveStudentId={financeActiveStudent}
+            clearActiveStudentId={() => setFinanceActiveStudent(null)}
+          />
+        )}
+
+        {activeTab === 'admissions' && user.role === 'ADMIN' && (
+          <AdmissionsModule token={token} />
+        )}
+
+        {activeTab === 'logs' && user.role === 'ADMIN' && (
+          <LogsModule token={token} />
+        )}
+
+        {activeTab === 'reports' && user.role !== 'STUDENT' && (
+          <ReportsModule token={token} />
+        )}
+
+        {activeTab === 'settings' && user.role === 'STAFF' && (
+          <StaffSettings token={token} profile={profile} onRefreshProfile={fetchProfileStatus} />
+        )}
+      </main>
+    </div>
+  );
+}
+
+```

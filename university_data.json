@@ -1,0 +1,776 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@university.com",
+      "role": "ADMIN",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "password": "admin"
+    },
+    {
+      "id": 2,
+      "username": "john.staff",
+      "email": "john@university.com",
+      "role": "STAFF",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "password": "password"
+    },
+    {
+      "id": 3,
+      "username": "jane.student",
+      "email": "jane@university.com",
+      "role": "STUDENT",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "password": "password"
+    },
+    {
+      "id": 4,
+      "username": "robert.staff",
+      "email": "robert@university.com",
+      "role": "STAFF",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "password": "password"
+    },
+    {
+      "id": 5,
+      "username": "isaac.staff",
+      "email": "isaac@university.com",
+      "role": "STAFF",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "password": "password"
+    },
+    {
+      "id": 6,
+      "username": "richard.staff",
+      "email": "richard@university.com",
+      "role": "STAFF",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "password": "password"
+    },
+    {
+      "id": 7,
+      "username": "moses.admin",
+      "email": "mosesgamboi272@gmail.com",
+      "role": "ADMIN",
+      "isActive": true,
+      "createdAt": "2026-06-24T17:21:40.832Z",
+      "password": "password"
+    },
+    {
+      "id": 8,
+      "username": "moses.staff",
+      "email": "mosesgamboi272@gmail.com",
+      "role": "STAFF",
+      "isActive": true,
+      "createdAt": "2026-06-24T17:21:40.834Z",
+      "password": "password"
+    },
+    {
+      "id": 9,
+      "username": "joyce",
+      "email": "joyce@gmail.com",
+      "role": "STUDENT",
+      "isActive": true,
+      "createdAt": "2026-06-24T17:27:54.999Z"
+    },
+    {
+      "id": 10,
+      "username": "moses ",
+      "email": "mosesgambo272@gmail.com",
+      "role": "STUDENT",
+      "isActive": true,
+      "createdAt": "2026-06-24T17:30:49.668Z",
+      "password": "0716075433",
+      "isVerified": false,
+      "verificationCode": "773151"
+    }
+  ],
+  "students": [
+    {
+      "id": 1,
+      "userId": 3,
+      "studentId": "STU001",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "dateOfBirth": "2004-05-14",
+      "gender": "FEMALE",
+      "phone": "0987654321",
+      "address": "456 University Ave, Block B",
+      "enrollmentDate": "2023-09-01",
+      "status": "ACTIVE",
+      "email": "jane@university.com",
+      "profilePic": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+    },
+    {
+      "id": 2,
+      "userId": 9,
+      "studentId": "STU186",
+      "firstName": "joyce",
+      "lastName": "joyce",
+      "dateOfBirth": "2004-01-01",
+      "gender": "FEMALE",
+      "phone": "",
+      "address": "",
+      "enrollmentDate": "2026-06-24",
+      "status": "ACTIVE",
+      "email": "joyce@gmail.com",
+      "profilePic": "https://images.unsplash.com/photo-1500000203273?w=150"
+    },
+    {
+      "id": 3,
+      "userId": 10,
+      "studentId": "STU003",
+      "firstName": "mwamuye",
+      "lastName": "mwamuye",
+      "dateOfBirth": "2004-05-14",
+      "gender": "MALE",
+      "phone": "07160754533",
+      "address": "nairobi",
+      "enrollmentDate": "2026-06-24",
+      "status": "ACTIVE",
+      "adminApproved": true,
+      "lecturerApproved": true,
+      "email": "mosesgambo272@gmail.com",
+      "profilePic": "https://images.unsplash.com/photo-1500000301330?w=150"
+    }
+  ],
+  "staff": [
+    {
+      "id": 1,
+      "userId": 2,
+      "staffId": "STF001",
+      "firstName": "John",
+      "lastName": "Doe",
+      "position": "Senior Teacher",
+      "department": "Computer Science",
+      "qualification": "M.Sc. in Computer Science",
+      "joiningDate": "2020-01-15",
+      "phone": "1234567890",
+      "email": "john@university.com",
+      "address": "123 Faculty Lane, West Campus",
+      "status": "ACTIVE",
+      "profilePic": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150"
+    },
+    {
+      "id": 2,
+      "userId": 4,
+      "staffId": "STF002",
+      "firstName": "Robert",
+      "lastName": "Boyle",
+      "position": "Lecturer",
+      "department": "Mechanical Engineering",
+      "qualification": "Ph.D. in Thermodynamics",
+      "joiningDate": "2021-08-10",
+      "phone": "555-0102",
+      "email": "robert@university.com",
+      "address": "254 Engineering Annex",
+      "status": "ACTIVE",
+      "profilePic": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150"
+    },
+    {
+      "id": 3,
+      "userId": 5,
+      "staffId": "STF003",
+      "firstName": "Isaac",
+      "lastName": "Newton",
+      "position": "Professor",
+      "department": "Mechanical Engineering",
+      "qualification": "Ph.D. in Classical Mechanics",
+      "joiningDate": "2019-02-12",
+      "phone": "555-0103",
+      "email": "isaac@university.com",
+      "address": "101 Newton Core Tower",
+      "status": "ACTIVE",
+      "profilePic": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150"
+    },
+    {
+      "id": 4,
+      "userId": 6,
+      "staffId": "STF004",
+      "firstName": "Richard",
+      "lastName": "Feynman",
+      "position": "Associate Professor",
+      "department": "Mechanical Engineering",
+      "qualification": "Ph.D. in Quantum Electrodynamics",
+      "joiningDate": "2022-01-10",
+      "phone": "555-0104",
+      "email": "richard@university.com",
+      "address": "305 Quantum Labs Hall",
+      "status": "ACTIVE",
+      "profilePic": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150"
+    },
+    {
+      "id": 5,
+      "userId": 8,
+      "staffId": "STF005",
+      "firstName": "Moses",
+      "lastName": "Gamboi",
+      "position": "Creative Studio Tutor",
+      "department": "Mechanical Engineering",
+      "qualification": "M.Sc. in Engineering & Fluid Dynamics",
+      "joiningDate": "2026-06-24",
+      "phone": "0717161616",
+      "email": "mosesgamboi272@gmail.com",
+      "address": "734 Academic Pavilion, Mechanical Wing",
+      "status": "ACTIVE"
+    }
+  ],
+  "classes": [
+    {
+      "id": 1,
+      "className": "Computer Science",
+      "section": "A",
+      "academicYear": "2024",
+      "capacity": 30,
+      "description": "Core Computer Science curriculum"
+    },
+    {
+      "id": 2,
+      "className": "Software Engineering",
+      "section": "B",
+      "academicYear": "2024",
+      "capacity": 25,
+      "description": "Advanced Software Architectures"
+    },
+    {
+      "id": 3,
+      "className": "Mechanical Engineering",
+      "section": "M",
+      "academicYear": "2024",
+      "capacity": 40,
+      "description": "Core Thermodynamic and Fluid Engineering"
+    }
+  ],
+  "subjects": [
+    {
+      "id": 1,
+      "subjectCode": "CS101",
+      "subjectName": "Programming Fundamentals",
+      "credits": 3,
+      "description": "Introduction to structural programming & logic",
+      "classId": 1
+    },
+    {
+      "id": 2,
+      "subjectCode": "CS102",
+      "subjectName": "Data Structures",
+      "credits": 3,
+      "description": "Linked Lists, Trees, Graphs & Sorting Algortihms",
+      "classId": 1
+    },
+    {
+      "id": 3,
+      "subjectCode": "SE201",
+      "subjectName": "Software Architecture",
+      "credits": 4,
+      "description": "Design Patterns and Distributed Systems",
+      "classId": 2
+    },
+    {
+      "id": 4,
+      "subjectCode": "ME301",
+      "subjectName": "Thermodynamics",
+      "credits": 4,
+      "description": "Concepts of heat energy, work cycles, and entropy mechanisms",
+      "classId": 3
+    },
+    {
+      "id": 5,
+      "subjectCode": "ME302",
+      "subjectName": "Fluid Mechanics",
+      "credits": 4,
+      "description": "Hydrostatic forces, Bernoulli equation, and streamflow analysis",
+      "classId": 3
+    },
+    {
+      "id": 6,
+      "subjectCode": "ME303",
+      "subjectName": "Theory of Machines",
+      "credits": 3,
+      "description": "Gears, link assemblies, and vibration kinematics",
+      "classId": 3
+    },
+    {
+      "id": 7,
+      "subjectCode": "ME304",
+      "subjectName": "Strength of Materials",
+      "credits": 3,
+      "description": "Elastic stress, strain profiles, and heavy load structures",
+      "classId": 3
+    }
+  ],
+  "staffSubjects": [
+    {
+      "id": 1,
+      "staffId": 1,
+      "subjectId": 1,
+      "academicYear": "2024"
+    },
+    {
+      "id": 2,
+      "staffId": 1,
+      "subjectId": 2,
+      "academicYear": "2024"
+    },
+    {
+      "id": 3,
+      "staffId": 1,
+      "subjectId": 4,
+      "academicYear": "2024"
+    },
+    {
+      "id": 4,
+      "staffId": 2,
+      "subjectId": 5,
+      "academicYear": "2024"
+    },
+    {
+      "id": 5,
+      "staffId": 3,
+      "subjectId": 6,
+      "academicYear": "2024"
+    },
+    {
+      "id": 6,
+      "staffId": 4,
+      "subjectId": 7,
+      "academicYear": "2024"
+    },
+    {
+      "id": 7,
+      "staffId": 5,
+      "subjectId": 4,
+      "academicYear": "2024"
+    },
+    {
+      "id": 8,
+      "staffId": 5,
+      "subjectId": 5,
+      "academicYear": "2024"
+    }
+  ],
+  "studentEnrollments": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "classId": 1,
+      "enrollmentDate": "2023-09-01",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 2,
+      "studentId": 2,
+      "classId": 2,
+      "enrollmentDate": "2026-06-24",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 3,
+      "studentId": 3,
+      "classId": 3,
+      "enrollmentDate": "2026-06-24",
+      "status": "ACTIVE"
+    }
+  ],
+  "feeStructures": [
+    {
+      "id": 1,
+      "classId": 1,
+      "academicYear": "2024",
+      "totalFees": 12000,
+      "admissionFee": 1500,
+      "tuitionFee": 9000,
+      "libraryFee": 1000,
+      "sportsFee": 500,
+      "dueDate": "2024-10-31",
+      "lateFeePenalty": 150
+    },
+    {
+      "id": 2,
+      "classId": 2,
+      "academicYear": "2024",
+      "totalFees": 14000,
+      "admissionFee": 2000,
+      "tuitionFee": 10000,
+      "libraryFee": 1200,
+      "sportsFee": 800,
+      "dueDate": "2024-11-15",
+      "lateFeePenalty": 200
+    }
+  ],
+  "feePayments": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "amountPaid": 8000,
+      "paymentDate": "2024-03-10",
+      "paymentMethod": "BANK_TRANSFER",
+      "transactionId": "TXN89123789",
+      "receiptNo": "REC-2024-001",
+      "remarks": "Paid 1st semester fees",
+      "academicYear": "2024"
+    }
+  ],
+  "salaryStructures": [
+    {
+      "id": 1,
+      "staffId": 1,
+      "basicSalary": 6500,
+      "allowances": 1200,
+      "deductions": 450,
+      "effectiveFrom": "2020-01-15"
+    }
+  ],
+  "salaryPayments": [
+    {
+      "id": 1,
+      "staffId": 1,
+      "amount": 7250,
+      "paymentDate": "2024-05-28",
+      "month": 5,
+      "year": 2024,
+      "paymentMethod": "BANK_TRANSFER",
+      "transactionId": "SAL890123",
+      "status": "PAID"
+    }
+  ],
+  "classrooms": [
+    {
+      "id": 1,
+      "roomNumber": "RM301",
+      "building": "Engineering Block",
+      "capacity": 60,
+      "hasProjector": true,
+      "hasAc": true
+    },
+    {
+      "id": 2,
+      "roomNumber": "RM102",
+      "building": "Science Center",
+      "capacity": 45,
+      "hasProjector": true,
+      "hasAc": false
+    },
+    {
+      "id": 3,
+      "roomNumber": "RM405",
+      "building": "Humanities Tower",
+      "capacity": 35,
+      "hasProjector": false,
+      "hasAc": false
+    }
+  ],
+  "classroomAssignments": [
+    {
+      "id": 1,
+      "classroomId": 1,
+      "classId": 1,
+      "subjectId": 1,
+      "staffId": 1,
+      "dayOfWeek": "MONDAY",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "academicYear": "2024"
+    },
+    {
+      "id": 2,
+      "classroomId": 1,
+      "classId": 1,
+      "subjectId": 2,
+      "staffId": 1,
+      "dayOfWeek": "WEDNESDAY",
+      "startTime": "13:00",
+      "endTime": "15:00",
+      "academicYear": "2024"
+    },
+    {
+      "id": 3,
+      "classroomId": 1,
+      "classId": 3,
+      "subjectId": 4,
+      "staffId": 1,
+      "dayOfWeek": "MONDAY",
+      "startTime": "11:00",
+      "endTime": "13:00",
+      "academicYear": "2024"
+    },
+    {
+      "id": 4,
+      "classroomId": 1,
+      "classId": 3,
+      "subjectId": 5,
+      "staffId": 2,
+      "dayOfWeek": "TUESDAY",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "academicYear": "2024"
+    },
+    {
+      "id": 5,
+      "classroomId": 1,
+      "classId": 3,
+      "subjectId": 6,
+      "staffId": 3,
+      "dayOfWeek": "THURSDAY",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "academicYear": "2024"
+    },
+    {
+      "id": 6,
+      "classroomId": 1,
+      "classId": 3,
+      "subjectId": 7,
+      "staffId": 4,
+      "dayOfWeek": "FRIDAY",
+      "startTime": "10:00",
+      "endTime": "12:05",
+      "academicYear": "2024"
+    }
+  ],
+  "grades": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "subjectId": 1,
+      "marksObtained": 88,
+      "totalMarks": 100,
+      "grade": "A",
+      "examType": "MID_TERM",
+      "academicYear": "2024"
+    },
+    {
+      "id": 2,
+      "studentId": 1,
+      "subjectId": 1,
+      "marksObtained": 92,
+      "totalMarks": 100,
+      "grade": "A+",
+      "examType": "FINAL_TERM",
+      "academicYear": "2024"
+    }
+  ],
+  "attendance": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "subjectId": 1,
+      "date": "2024-06-11",
+      "status": "PRESENT"
+    },
+    {
+      "id": 2,
+      "studentId": 1,
+      "subjectId": 1,
+      "date": "2024-06-12",
+      "status": "PRESENT"
+    }
+  ],
+  "logs": [
+    {
+      "id": 11,
+      "userId": 2,
+      "username": "SYSTEM",
+      "role": "SYSTEM",
+      "action": "ACTIVATE_STUDENT",
+      "details": "Student ID 3 is fully activated and course-ready",
+      "timestamp": "2026-06-24T17:42:03.754Z"
+    },
+    {
+      "id": 10,
+      "userId": 2,
+      "username": "john.staff",
+      "role": "STAFF",
+      "action": "APPROVE_STUDENT_LECTURER",
+      "details": "Lecturer approved student admission record ID 3",
+      "timestamp": "2026-06-24T17:42:03.752Z"
+    },
+    {
+      "id": 9,
+      "userId": 2,
+      "username": "john.staff",
+      "role": "STAFF",
+      "action": "AUTH_LOGIN",
+      "details": "Successfully logged in. Role: STAFF",
+      "timestamp": "2026-06-24T17:41:54.603Z"
+    },
+    {
+      "id": 8,
+      "userId": 1,
+      "username": "admin",
+      "role": "ADMIN",
+      "action": "APPROVE_STUDENT_ADMIN",
+      "details": "Admissions (Admin) approved student admission record ID 3",
+      "timestamp": "2026-06-24T17:41:38.910Z"
+    },
+    {
+      "id": 7,
+      "userId": 1,
+      "username": "admin",
+      "role": "ADMIN",
+      "action": "AUTH_LOGIN",
+      "details": "Successfully logged in. Role: ADMIN",
+      "timestamp": "2026-06-24T17:41:12.910Z"
+    },
+    {
+      "id": 6,
+      "userId": 10,
+      "username": "moses ",
+      "role": "STUDENT",
+      "action": "AUTH_SIGNUP",
+      "details": "Student self-onboarded. Verification code generated: 773151",
+      "timestamp": "2026-06-24T17:30:49.692Z"
+    },
+    {
+      "id": 5,
+      "userId": 1,
+      "username": "admin",
+      "role": "ADMIN",
+      "action": "CREATE_STUDENT",
+      "details": "Created student joyce joyce (STU186)",
+      "timestamp": "2026-06-24T17:27:55.014Z"
+    },
+    {
+      "id": 4,
+      "userId": 1,
+      "username": "admin",
+      "role": "ADMIN",
+      "action": "AUTH_LOGIN",
+      "details": "Successfully logged in. Role: ADMIN",
+      "timestamp": "2026-06-24T17:24:13.363Z"
+    },
+    {
+      "id": 1,
+      "userId": 1,
+      "username": "admin",
+      "role": "ADMIN",
+      "action": "SYSTEM_STARTUP",
+      "details": "University Database initialized with Mechanical Engineering program metrics.",
+      "timestamp": "2026-06-13T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "username": "system",
+      "role": "SYSTEM",
+      "action": "SEED_ADMIN",
+      "details": "Automatically seeded Admin account for mosesgamboi272@gmail.com",
+      "timestamp": "2026-06-24T17:21:40.834Z"
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "username": "system",
+      "role": "SYSTEM",
+      "action": "SEED_STAFF",
+      "details": "Automatically seeded Staff Tutor account for mosesgamboi272@gmail.com with Mechanical Engineering subjects",
+      "timestamp": "2026-06-24T17:21:40.834Z"
+    }
+  ],
+  "courseNotes": [
+    {
+      "id": 1,
+      "subjectId": 4,
+      "title": "Thermodynamics Lecture 1 - Basics & Laws",
+      "description": "Covers thermal equilibrium, equation of states, and the Zeroth/First laws of conservation of energy.",
+      "fileUrl": "http://example.com/notes/thermo_basic_laws.pdf",
+      "uploadedBy": "John Doe",
+      "createdAt": "2026-06-14T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "subjectId": 5,
+      "title": "Fluid Dynamics & Bernoulli Applications",
+      "description": "Deriving Bernoulli equation and surveying flow rate through venturi tubes.",
+      "fileUrl": "http://example.com/notes/fluids_bernoulli.pdf",
+      "uploadedBy": "Robert Boyle",
+      "createdAt": "2026-06-14T15:30:00.000Z"
+    }
+  ],
+  "quizzesAndAssignments": [
+    {
+      "id": 1,
+      "subjectId": 4,
+      "type": "QUIZ",
+      "title": "Thermodynamics Laws Baseline Quiz",
+      "description": "Evaluate your foundations on state changes, heat transfer, and cyclic engines.",
+      "maxPoints": 10,
+      "durationMinutes": 10,
+      "deadline": "2026-12-31T23:59:00.000Z",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Which physical attribute is governed and established by the Zeroth Law of Thermodynamics?",
+          "options": [
+            "Internal work",
+            "Entropy balance",
+            "Thermal gradient",
+            "Temperature equilibrium"
+          ],
+          "correctAnswerIndex": 3
+        },
+        {
+          "id": 2,
+          "text": "In an adiabatic gas compression, what is the heat transfer equivalent to?",
+          "options": [
+            "dQ = 0",
+            "dQ > 0",
+            "dQ < 0",
+            "dQ equals system work"
+          ],
+          "correctAnswerIndex": 0
+        },
+        {
+          "id": 3,
+          "text": "Which thermodynamic engine cycle operates with the highest theoretical efficiency margin?",
+          "options": [
+            "Diesel Cycle",
+            "Otto Cycle",
+            "Rankine Cycle",
+            "Carnot Cycle"
+          ],
+          "correctAnswerIndex": 3
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "subjectId": 5,
+      "type": "ASSIGNMENT",
+      "title": "Fluid Mechanics - Venturi Meter Equations",
+      "description": "Provide step-by-step mathematical proofs deriving fluid velocity and volumetric flow rate indices using manometer readings. Upload your PDF notes or external document link below.",
+      "maxPoints": 100,
+      "durationMinutes": 0,
+      "deadline": "2026-12-31T23:59:00.000Z"
+    }
+  ],
+  "studentSubmissions": [],
+  "nextId": {
+    "users": 11,
+    "students": 4,
+    "staff": 6,
+    "classes": 4,
+    "subjects": 8,
+    "staffSubjects": 9,
+    "studentEnrollments": 4,
+    "feeStructures": 3,
+    "feePayments": 2,
+    "salaryStructures": 2,
+    "salaryPayments": 2,
+    "classrooms": 4,
+    "classroomAssignments": 7,
+    "grades": 3,
+    "attendance": 3,
+    "logs": 12,
+    "courseNotes": 3,
+    "quizzesAndAssignments": 3,
+    "studentSubmissions": 1
+  }
+}
