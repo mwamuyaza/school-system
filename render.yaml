@@ -21,7 +21,6 @@ services:
     envVars:
       - key: VITE_API_BASE_URL
         fromService:
-          type: web
           name: university-java-backend
           property: url
 
